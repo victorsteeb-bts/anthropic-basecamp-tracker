@@ -1222,8 +1222,10 @@
     </div>
 
     <div class="view" id="all-items">
-        <div style="margin-bottom: 16px;">
+        <div style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
             <button class="btn btn-primary" onclick="openAddItemModal()">+ Add Item</button>
+            <div id="filterBar" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;"></div>
+            <button class="btn" id="clearFiltersBtn" style="display:none; font-size: 11px;" onclick="clearFilters()">Clear Filters</button>
         </div>
         <div class="table-container">
             <table id="trackerTable">
@@ -1415,6 +1417,7 @@
         let searchQuery = '';
         let sortField = null;
         let sortDir = 1; // 1 = asc, -1 = desc
+        let activeFilters = {}; // { fieldKey: Set of active values }
 
         function getDisplayItems() {
             if (!searchQuery) return allItems;
@@ -1469,6 +1472,7 @@
             }
 
             populateOwnersList();
+            buildFilterBar();
             renderAllViews();
             attachEventListeners();
         }
@@ -1693,6 +1697,54 @@
             });
         }
 
+        const filterableFields = [
+            { key: 'status', label: 'Status' },
+            { key: 'priority', label: 'Priority' },
+            { key: 'type', label: 'Type' },
+            { key: 'day', label: 'Day' },
+            { key: 'targetUpdateBy', label: 'Version' },
+        ];
+
+        function buildFilterBar() {
+            const bar = document.getElementById('filterBar');
+            bar.innerHTML = filterableFields.map(f => {
+                const values = [...new Set(allItems.map(i => i[f.key]).filter(Boolean))].sort();
+                return `<span style="font-size:11px; color: var(--text-secondary); font-weight:600;">${f.label}:</span>` +
+                    values.map(v => {
+                        const active = activeFilters[f.key]?.has(v);
+                        return `<button onclick="toggleFilter('${f.key}','${v}')" style="padding:3px 8px; font-size:11px; border-radius:12px; border:1px solid ${active ? 'var(--clay)' : 'var(--border-color)'}; background:${active ? 'var(--clay)' : 'transparent'}; color:${active ? 'white' : 'var(--text-secondary)'}; cursor:pointer;">${v}</button>`;
+                    }).join('');
+            }).join('<span style="width:1px; background:var(--border-color); margin:0 4px;"></span>');
+        }
+
+        function toggleFilter(field, value) {
+            if (!activeFilters[field]) activeFilters[field] = new Set();
+            if (activeFilters[field].has(value)) {
+                activeFilters[field].delete(value);
+                if (activeFilters[field].size === 0) delete activeFilters[field];
+            } else {
+                activeFilters[field].add(value);
+            }
+            document.getElementById('clearFiltersBtn').style.display = Object.keys(activeFilters).length ? 'inline-block' : 'none';
+            buildFilterBar();
+            renderTable();
+        }
+
+        function clearFilters() {
+            activeFilters = {};
+            document.getElementById('clearFiltersBtn').style.display = 'none';
+            buildFilterBar();
+            renderTable();
+        }
+
+        function getFilteredItems() {
+            let items = getDisplayItems();
+            for (const [field, values] of Object.entries(activeFilters)) {
+                items = items.filter(item => values.has(item[field]));
+            }
+            return items;
+        }
+
         function sortTable(field) {
             if (sortField === field) {
                 sortDir *= -1;
@@ -1706,7 +1758,7 @@
         function renderTable() {
             const dayOrder = { 'Prework': 0, 'Day 1': 1, 'Day 2': 2 };
             const priorityOrder = { 'High': 0, 'Medium': 1, 'Low': 2 };
-            let items = getDisplayItems().slice();
+            let items = getFilteredItems().slice();
             if (sortField) {
                 items.sort((a, b) => {
                     let av = a[sortField], bv = b[sortField];
@@ -2042,6 +2094,7 @@
                         allItems = data.items;
                         if (data.roles) scheduleRoles = data.roles;
                         saveToStorage();
+                        buildFilterBar();
                         renderAllViews();
                         alert(`Imported ${data.items.length} items successfully!`);
                     }
