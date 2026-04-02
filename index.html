@@ -1,0 +1,2026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Basecamp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #FAF9F5;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F0EDE6;
+            --border-color: #E8E6DC;
+            --text-primary: #141413;
+            --text-secondary: #5E5D5A;
+            --text-tertiary: #807F7A;
+            --clay: #D97757;
+            --sky: #6A9BCC;
+            --olive: #788C5D;
+            --fig: #C46686;
+            --coral: #EBCECE;
+            --heather: #CBCADB;
+            --cactus: #BCD1CA;
+            --oat: #E3DACC;
+            --status-complete: #788C5D;
+            --status-complete-bg: #BCD1CA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Code Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+            background: #FAF9F5;
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        .header {
+            background: #191918;
+            padding: 18px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            position: relative;
+            box-shadow: none;
+            border-bottom: 3px solid transparent;
+            border-image: linear-gradient(90deg, var(--clay) 0%, var(--fig) 30%, var(--sky) 70%, var(--olive) 100%) 1;
+        }
+
+        .header h1 {
+            font-family: 'Source Code Pro', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            color: #FAF9F5;
+            text-shadow: none;
+            letter-spacing: -0.3px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex: 1;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-bar {
+            padding: 8px 14px;
+            border: 1px solid rgba(250, 249, 245, 0.2);
+            border-radius: 6px;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 12px;
+            background: rgba(250, 249, 245, 0.08);
+            color: #FAF9F5;
+            min-width: 220px;
+            transition: all 0.2s;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--clay);
+            background: rgba(250, 249, 245, 0.12);
+            box-shadow: 0 0 0 2px rgba(217, 119, 87, 0.15);
+        }
+
+        .search-bar::placeholder {
+            color: rgba(250, 249, 245, 0.4);
+        }
+
+        .btn {
+            padding: 10px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--clay);
+        }
+
+        .btn-primary {
+            background: var(--clay);
+            color: white;
+            border: none;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(217, 119, 87, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: #c85a42;
+            box-shadow: 0 4px 12px rgba(217, 119, 87, 0.3);
+        }
+
+        .menu-btn {
+            position: relative;
+            background: rgba(250, 249, 245, 0.08);
+            color: #FAF9F5;
+            border: 1px solid rgba(250, 249, 245, 0.2);
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        .menu-btn:hover {
+            background: rgba(250, 249, 245, 0.15);
+            border-color: rgba(250, 249, 245, 0.35);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            min-width: 180px;
+            z-index: 100;
+            margin-top: 8px;
+            display: none;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .dropdown-menu button {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .dropdown-menu button:hover {
+            background: linear-gradient(90deg, rgba(217, 119, 87, 0.08) 0%, rgba(106, 155, 204, 0.08) 100%);
+        }
+
+        .dropdown-menu button:not(:last-child) {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 6px;
+            background: #242423;
+            padding: 10px 32px;
+            border-bottom: none;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 8px 18px;
+            background: transparent;
+            border: 1px solid rgba(250, 249, 245, 0.15);
+            cursor: pointer;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(250, 249, 245, 0.6);
+            border-radius: 6px;
+            transition: all 0.2s;
+            position: relative;
+            margin-right: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tab:hover {
+            background: rgba(250, 249, 245, 0.08);
+            color: rgba(250, 249, 245, 0.9);
+            border-color: rgba(250, 249, 245, 0.25);
+        }
+
+        .tab.active {
+            color: #FAF9F5;
+            background: rgba(217, 119, 87, 0.15);
+            border-color: var(--clay);
+            box-shadow: none;
+        }
+
+        .tab[data-tab="sprint-view"].active { background: rgba(106, 155, 204, 0.15); border-color: var(--sky); color: #FAF9F5; }
+        .tab[data-tab="all-items"].active { background: rgba(120, 140, 93, 0.15); border-color: var(--olive); color: #FAF9F5; }
+        /* version-sort tab removed — merged into sprint-view */
+        .tab[data-tab="byday"].active { background: rgba(203, 202, 219, 0.15); border-color: var(--heather); color: #FAF9F5; box-shadow: none; }
+        .tab[data-tab="schedule"].active { background: rgba(188, 209, 202, 0.15); border-color: var(--cactus); color: #FAF9F5; box-shadow: none; }
+
+        .view {
+            display: none;
+            padding: 24px;
+            min-height: calc(100vh - 120px);
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s;
+            border-left: none;
+            border-top: 3px solid var(--clay);
+        }
+
+        .stat-card:nth-child(1) {
+            background: white;
+            border-top-color: var(--clay);
+        }
+        .stat-card:nth-child(2) {
+            background: white;
+            border-top-color: var(--oat);
+        }
+        .stat-card:nth-child(3) {
+            background: white;
+            border-top-color: var(--fig);
+        }
+        .stat-card:nth-child(4) {
+            background: white;
+            border-top-color: var(--olive);
+        }
+        .stat-card:nth-child(5) {
+            background: white;
+            border-top-color: var(--sky);
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-label {
+            font-family: 'Source Code Pro', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-family: 'Libre Baskerville', Georgia, serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .needs-attention-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .needs-attention-box {
+            background: linear-gradient(135deg, #EBCECE 0%, rgba(235, 202, 206, 0.2) 100%);
+            border-left: 4px solid var(--fig);
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(196, 102, 134, 0.1);
+        }
+
+        .needs-attention-box strong {
+            color: var(--fig);
+            display: block;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+
+        .needs-attention-box p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .recently-updated {
+            background: linear-gradient(135deg, #CBCADB 0%, rgba(203, 202, 219, 0.2) 100%);
+            border-left: 4px solid var(--heather);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(203, 202, 219, 0.2);
+        }
+
+        .recently-updated strong {
+            color: var(--heather);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .section-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-top: 32px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid var(--clay);
+            display: inline-block;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            text-align: center;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+
+        .badge.not-started {
+            background: var(--fig);
+            color: white;
+        }
+
+        .badge.in-progress {
+            background: var(--clay);
+            color: white;
+        }
+
+        .badge.in-review {
+            background: var(--sky);
+            color: white;
+        }
+
+        .badge.complete {
+            background: var(--olive);
+            color: white;
+        }
+
+        .badge.must-have {
+            background: var(--clay);
+            color: white;
+        }
+
+        .badge.nice-to-have {
+            background: var(--heather);
+            color: var(--text-primary);
+        }
+
+        .badge.tbd {
+            background: var(--oat);
+            color: var(--text-primary);
+        }
+
+        .badge.module {
+            background: var(--clay);
+            color: white;
+        }
+
+        .badge.collab {
+            background: var(--sky);
+            color: white;
+        }
+
+        .badge.resource {
+            background: var(--olive);
+            color: white;
+        }
+
+        .kanban-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            height: calc(100vh - 160px);
+            align-content: start;
+        }
+
+        .kanban-column {
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-top: 6px solid var(--clay);
+            overflow: hidden;
+        }
+
+        .kanban-column.v2 {
+            border-top-color: var(--clay);
+            background: linear-gradient(180deg, rgba(217, 119, 87, 0.03) 0%, rgba(255, 255, 255, 1) 20%);
+        }
+
+        .kanban-column.v3 {
+            border-top-color: var(--sky);
+            background: linear-gradient(180deg, rgba(106, 155, 204, 0.03) 0%, rgba(255, 255, 255, 1) 20%);
+        }
+
+        .kanban-column.v4 {
+            border-top-color: var(--olive);
+            background: linear-gradient(180deg, rgba(120, 140, 93, 0.03) 0%, rgba(255, 255, 255, 1) 20%);
+        }
+
+        .kanban-column.done {
+            border-top-color: var(--cactus);
+            background: linear-gradient(180deg, rgba(188, 209, 202, 0.03) 0%, rgba(255, 255, 255, 1) 20%);
+        }
+
+        .kanban-header {
+            padding: 14px 16px;
+            font-family: 'Source Code Pro', monospace;
+            font-weight: 700;
+            font-size: 11px;
+            background: var(--clay);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: none;
+        }
+
+        .kanban-column.v3 .kanban-header {
+            background: var(--sky);
+        }
+
+        .kanban-column.v4 .kanban-header {
+            background: var(--olive);
+        }
+
+        .kanban-column.done .kanban-header {
+            background: var(--cactus);
+            color: var(--text-primary);
+        }
+
+        .kanban-cards {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            min-height: 100px;
+        }
+
+        .kanban-card {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--clay);
+            cursor: grab;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        .kanban-card.prework {
+            border-left-color: var(--sky);
+            background: linear-gradient(135deg, rgba(106, 155, 204, 0.08) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+
+        .kanban-card.day1 {
+            border-left-color: var(--clay);
+            background: linear-gradient(135deg, rgba(217, 119, 87, 0.08) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+
+        .kanban-card.day2 {
+            border-left-color: var(--fig);
+            background: linear-gradient(135deg, rgba(196, 102, 134, 0.08) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+
+        .kanban-card h4 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .kanban-card p {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #242423;
+            color: #FAF9F5;
+            font-family: 'Source Code Pro', monospace;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 1.2px;
+        }
+
+        thead th {
+            padding: 14px 16px;
+            text-align: left;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+
+        tbody tr:nth-child(odd) {
+            background: linear-gradient(90deg, rgba(227, 218, 204, 0.4) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+
+        tbody tr:nth-child(even) {
+            background: white;
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(90deg, rgba(217, 119, 87, 0.06) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+
+        tbody td {
+            padding: 14px 16px;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .notes-cell {
+            max-width: 300px;
+            white-space: normal;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+
+        .sprint-container {
+            display: grid;
+            gap: 24px;
+        }
+
+        .sprint-group {
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-top: 6px solid var(--clay);
+        }
+
+        .sprint-group.v2 {
+            border-top-color: var(--clay);
+            background: linear-gradient(180deg, rgba(217, 119, 87, 0.02) 0%, white 15%);
+        }
+
+        .sprint-group.v3 {
+            border-top-color: var(--sky);
+            background: linear-gradient(180deg, rgba(106, 155, 204, 0.02) 0%, white 15%);
+        }
+
+        .sprint-header {
+            padding: 16px 20px;
+            background: var(--clay);
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sprint-group.v3 .sprint-header {
+            background: var(--sky);
+        }
+
+        .sprint-items {
+            padding: 12px;
+        }
+
+        .sprint-item {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--clay);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s;
+        }
+
+        .sprint-group.v2 .sprint-item {
+            background: linear-gradient(135deg, rgba(217, 119, 87, 0.05) 0%, white 100%);
+        }
+
+        .sprint-group.v3 .sprint-item {
+            background: linear-gradient(135deg, rgba(106, 155, 204, 0.05) 0%, white 100%);
+        }
+
+        .sprint-item h4 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .sprint-item p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .byday-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            height: calc(100vh - 160px);
+        }
+
+        .byday-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .byday-header {
+            padding: 14px 18px;
+            font-family: 'Source Code Pro', monospace;
+            font-weight: 700;
+            font-size: 12px;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+            text-align: center;
+        }
+
+        .byday-header.prework {
+            background: var(--sky);
+            box-shadow: 0 4px 8px rgba(106, 155, 204, 0.2);
+        }
+
+        .byday-header.day1 {
+            background: var(--clay);
+            box-shadow: 0 4px 8px rgba(217, 119, 87, 0.2);
+        }
+
+        .byday-header.day2 {
+            background: var(--fig);
+            box-shadow: 0 4px 8px rgba(196, 102, 134, 0.2);
+        }
+
+        .byday-items {
+            flex: 1;
+            background: white;
+            border-radius: 0 0 12px 12px;
+            padding: 12px;
+            overflow-y: auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .byday-items.prework {
+            background: linear-gradient(180deg, rgba(106, 155, 204, 0.06) 0%, white 20%);
+        }
+
+        .byday-items.day1 {
+            background: linear-gradient(180deg, rgba(217, 119, 87, 0.06) 0%, white 20%);
+        }
+
+        .byday-items.day2 {
+            background: linear-gradient(180deg, rgba(196, 102, 134, 0.06) 0%, white 20%);
+        }
+
+        .byday-item {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--sky);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s;
+        }
+
+        .byday-items.day1 .byday-item {
+            background: linear-gradient(135deg, rgba(217, 119, 87, 0.08) 0%, white 100%);
+            border-left-color: var(--clay);
+        }
+
+        .byday-items.day2 .byday-item {
+            background: linear-gradient(135deg, rgba(196, 102, 134, 0.08) 0%, white 100%);
+            border-left-color: var(--fig);
+        }
+
+        .byday-item h4 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .byday-item p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .byday-reference {
+            background: linear-gradient(135deg, rgba(120, 140, 93, 0.1) 0%, rgba(120, 140, 93, 0.03) 100%);
+            border-left: 4px solid var(--olive);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            grid-column: 1 / -1;
+        }
+
+        .schedule-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .schedule-events {
+            display: grid;
+            gap: 16px;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            border-top: 6px solid var(--clay);
+        }
+
+        .event-card:nth-child(1) {
+            border-top-color: var(--coral);
+            background: linear-gradient(135deg, rgba(235, 202, 206, 0.2) 0%, white 100%);
+        }
+
+        .event-card:nth-child(2) {
+            border-top-color: var(--heather);
+            background: linear-gradient(135deg, rgba(203, 202, 219, 0.2) 0%, white 100%);
+        }
+
+        .event-card:nth-child(3) {
+            border-top-color: var(--cactus);
+            background: linear-gradient(135deg, rgba(188, 209, 202, 0.2) 0%, white 100%);
+        }
+
+        .event-card:nth-child(4) {
+            border-top-color: var(--clay);
+            background: linear-gradient(135deg, rgba(217, 119, 87, 0.2) 0%, white 100%);
+        }
+
+        .event-card:nth-child(5) {
+            border-top-color: var(--sky);
+            background: linear-gradient(135deg, rgba(106, 155, 204, 0.2) 0%, white 100%);
+        }
+
+        .event-card:nth-child(6) {
+            border-top-color: var(--olive);
+            background: linear-gradient(135deg, rgba(120, 140, 93, 0.2) 0%, white 100%);
+        }
+
+        .event-card:nth-child(7) {
+            border-top-color: var(--fig);
+            background: linear-gradient(135deg, rgba(196, 102, 134, 0.2) 0%, white 100%);
+        }
+
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .event-card h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .event-card p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .schedule-roles {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-top: 6px solid var(--sky);
+            max-height: calc(100vh - 160px);
+            overflow-y: auto;
+        }
+
+        .schedule-roles h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--sky);
+        }
+
+        .role-assignment {
+            background: linear-gradient(90deg, rgba(106, 155, 204, 0.08) 0%, rgba(255, 255, 255, 1) 100%);
+            border-left: 4px solid var(--sky);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .role-assignment strong {
+            color: var(--sky);
+            font-weight: 600;
+        }
+
+        .role-input {
+            font-size: 13px;
+            padding: 6px 8px;
+            border: 1px solid var(--sky);
+            border-radius: 4px;
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        .progress-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-top: 16px;
+        }
+
+        .progress-section h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--sky) 0%, var(--clay) 100%);
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+            box-shadow: 0 2px 4px rgba(106, 155, 204, 0.2);
+        }
+
+        .progress-item {
+            margin-bottom: 16px;
+        }
+
+        .progress-item-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+            border-top: 6px solid var(--clay);
+        }
+
+        .modal h2 {
+            font-family: 'Libre Baskerville', Georgia, serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .modal-form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-family: 'Source Code Pro', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--clay);
+            box-shadow: 0 0 0 3px rgba(217, 119, 87, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .modal-close {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: none;
+        }
+
+        .modal-submit {
+            background: var(--clay);
+            color: white;
+            border: none;
+        }
+
+        .modal-submit:hover {
+            background: #c85a42;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .progress-wrapper {
+            margin-bottom: 20px;
+        }
+
+        .progress-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .progress-labels {
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .kanban-container {
+                grid-template-columns: 1fr;
+            }
+
+            .byday-container {
+                grid-template-columns: 1fr;
+            }
+
+            .schedule-container {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .needs-attention-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                max-width: 90%;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-left {
+                width: 100%;
+            }
+
+            .header-controls {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <h1>Partner <em style="font-family: 'Libre Baskerville', Georgia, serif; font-style: italic; font-weight: 400;">Basecamp</em></h1>
+            <span style="font-family: 'Source Code Pro', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: rgba(250,249,245,0.4);">Program Tracker · Research Preview</span>
+        </div>
+        <div class="header-controls">
+            <input type="text" class="search-bar" id="searchInput" placeholder="Search items...">
+            <button class="btn menu-btn" id="menuBtn">Menu</button>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <button onclick="exportJSON()">Export JSON</button>
+                <button onclick="exportCSV()">Export CSV</button>
+                <button onclick="document.getElementById('importFile').click()">Import JSON</button>
+                <input type="file" id="importFile" style="display: none;" accept=".json">
+            </div>
+        </div>
+        <span style="font-family: 'Source Code Pro', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: rgba(250,249,245,0.35);">BTS × Anthropic<br>April 2026</span>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="dashboard">01 · Dashboard</button>
+        <button class="tab" data-tab="sprint-view">02 · Sprint View</button>
+        <button class="tab" data-tab="all-items">03 · All Items</button>
+        <button class="tab" data-tab="byday">04 · By Day</button>
+        <button class="tab" data-tab="schedule">05 · Schedule</button>
+    </div>
+
+        <div class="view active" id="dashboard">
+        <!-- FULL-PAGE TWO-COLUMN LAYOUT: Main content left, Events sidebar right -->
+        <div style="display: grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: start;">
+
+            <!-- LEFT COLUMN: Stats + Progress + Needs Attention -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+
+                <!-- TOP ROW: Stat Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Items</div>
+                        <div class="stat-value" id="totalItems">38</div>
+                        <div class="stat-change">V2: 27 | V3: 6 | V4: 4 | Done: 1</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Status Overview</div>
+                        <div class="stat-value" id="notStartedCount">0</div>
+                        <div class="stat-change">Not Started / In Progress / Complete</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Completion Rate</div>
+                        <div class="stat-value" id="completionRate">0%</div>
+                        <div class="stat-change">2 of 38 complete</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">By Priority</div>
+                        <div class="stat-value" id="mustHaveCount">0</div>
+                        <div class="stat-change">Must-have / Nice-to-have</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Days Until Event 1</div>
+                        <div class="stat-value" id="daysToEvent">0</div>
+                        <div class="stat-change">Apr 7-8 (Gallery)</div>
+                    </div>
+                </div>
+
+                <!-- Progress by Target Update By (HERO SECTION) -->
+                <div class="progress-section" style="padding: 28px; background: linear-gradient(135deg, rgba(196, 102, 134, 0.08) 0%, rgba(106, 155, 204, 0.08) 100%); border-radius: 12px; border: 1px solid rgba(139, 116, 101, 0.2);">
+                    <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 20px; color: var(--text-primary);">Progress by Target Update By</h2>
+                    <div class="progress-wrapper" style="display: flex; flex-direction: column; gap: 16px;">
+                        <div class="progress-item" style="background: white; padding: 16px; border-radius: 8px; border-left: 4px solid var(--clay);">
+                            <div class="progress-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <div class="progress-item-label" style="font-size: 16px; font-weight: 600;">V2 · Apr 7</div>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <span id="v2Count" style="font-size: 14px; color: var(--text-secondary);">0/31</span>
+                                    <div id="v2Progress" style="font-size: 18px; font-weight: 700; color: var(--clay); min-width: 50px;">0%</div>
+                                </div>
+                            </div>
+                            <div class="progress-bar" id="v2Bar" style="width: 0%; height: 20px; background: linear-gradient(90deg, var(--clay) 0%, rgba(217, 119, 87, 0.4) 100%); border-radius: 10px; transition: width 0.3s ease;"></div>
+                        </div>
+                        <div class="progress-item" style="background: white; padding: 16px; border-radius: 8px; border-left: 4px solid var(--sky);">
+                            <div class="progress-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <div class="progress-item-label" style="font-size: 16px; font-weight: 600;">V3 · Apr 21</div>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <span id="v3Count" style="font-size: 14px; color: var(--text-secondary);">0/6</span>
+                                    <div id="v3Progress" style="font-size: 18px; font-weight: 700; color: var(--sky); min-width: 50px;">0%</div>
+                                </div>
+                            </div>
+                            <div class="progress-bar" id="v3Bar" style="width: 0%; height: 20px; background: linear-gradient(90deg, var(--sky) 0%, rgba(106, 155, 204, 0.4) 100%); border-radius: 10px; transition: width 0.3s ease;"></div>
+                        </div>
+                        <div class="progress-item" style="background: white; padding: 16px; border-radius: 8px; border-left: 4px solid var(--olive);">
+                            <div class="progress-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <div class="progress-item-label" style="font-size: 16px; font-weight: 600;">V4 · Apr 27–May 27</div>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <span id="v4Count" style="font-size: 14px; color: var(--text-secondary);">0/4</span>
+                                    <div id="v4Progress" style="font-size: 18px; font-weight: 700; color: var(--olive); min-width: 50px;">0%</div>
+                                </div>
+                            </div>
+                            <div class="progress-bar" id="v4Bar" style="width: 0%; height: 20px; background: linear-gradient(90deg, var(--olive) 0%, rgba(120, 140, 93, 0.4) 100%); border-radius: 10px; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- V2 Priority Needs Attention -->
+                <div style="padding: 24px; background: white; border-radius: 12px; border: 1px solid var(--border-color);">
+                    <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--text-primary);">V2 Priority Needs Attention</h2>
+                    <div id="v2NeedsAttentionGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px;">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: Upcoming Events & Facilitators (spans full height) -->
+            <div style="padding: 20px; background: linear-gradient(135deg, rgba(106, 155, 204, 0.06) 0%, rgba(188, 209, 202, 0.06) 100%); border-radius: 12px; border: 1px solid var(--border-color); position: sticky; top: 80px; align-self: start; max-height: calc(100vh - 100px); overflow-y: auto;">
+                <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; color: var(--text-primary); border-bottom: 2px solid var(--sky); padding-bottom: 8px;">Upcoming Events & Facilitators</h2>
+                <div id="upcomingEventsGrid" style="display: flex; flex-direction: column; gap: 12px;">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="view" id="sprint-view">
+        <div class="kanban-container" id="kanbanContainer">
+        </div>
+    </div>
+
+    <div class="view" id="all-items">
+        <div style="margin-bottom: 16px;">
+            <button class="btn btn-primary" onclick="openAddItemModal()">+ Add Item</button>
+        </div>
+        <div class="table-container">
+            <table id="trackerTable">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 18%;">Name</th>
+                        <th style="width: 8%;">Day</th>
+                        <th style="width: 8%;">Type</th>
+                        <th style="width: 10%;">Status</th>
+                        <th style="width: 8%;">Priority</th>
+                        <th style="width: 8%;">Delivery Method</th>
+                        <th style="width: 8%;">Target Update By</th>
+                        <th style="width: 6%;">Owner</th>
+                        <th style="width: 25%;">Notes</th>
+                        <th style="width: 6%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="view" id="byday">
+        <div class="byday-container" id="bydayContainer">
+        </div>
+    </div>
+
+    <div class="view" id="schedule">
+        <div id="calendarView" style="padding: 8px 0;"></div>
+        <!-- Event detail modal -->
+        <div id="eventDetailOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(20,20,19,0.45); z-index:1000; justify-content:center; align-items:center;" onclick="if(event.target===this)closeEventDetail()">
+            <div id="eventDetailPanel" style="background:white; border-radius:16px; padding:32px; max-width:520px; width:90%; max-height:80vh; overflow-y:auto; box-shadow:0 24px 48px rgba(0,0,0,0.2); position:relative;">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="itemModal">
+        <div class="modal-content">
+            <h2>Add/Edit Item</h2>
+            <form class="modal-form" onsubmit="saveItem(event)">
+                <div class="form-group">
+                    <label>Name *</label>
+                    <input type="text" id="itemName" required>
+                </div>
+                <div class="form-group">
+                    <label>Day</label>
+                    <select id="itemDay">
+                        <option>Prework</option>
+                        <option>Day 1</option>
+                        <option>Day 2</option>
+                        <option>—</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="itemType">
+                        <option>Module</option>
+                        <option>Collab</option>
+                        <option>Resource</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="itemStatus">
+                        <option>Not started</option>
+                        <option>In progress</option>
+                        <option>In review</option>
+                        <option>Complete</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Priority</label>
+                    <select id="itemPriority">
+                        <option>Must-have</option>
+                        <option>Nice-to-have</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Delivery Method</label>
+                    <select id="itemDeliveryMethod">
+                        <option>HTML Slide</option>
+                        <option>Google Colab</option>
+                        <option>Claude Native</option>
+                        <option>PPTX</option>
+                        <option>Facilitated</option>
+                        <option>Markdown</option>
+                        <option>TBD</option>
+                        <option>—</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Target Update By</label>
+                    <select id="itemtargetUpdateBy">
+                        <option>V2</option>
+                        <option>V3</option>
+                        <option>V4</option>
+                        <option>Done</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Owner</label>
+                    <input type="text" id="itemOwner" list="ownersList">
+                    <datalist id="ownersList"></datalist>
+                </div>
+                <div class="form-group">
+                    <label>Est Hours</label>
+                    <input type="text" id="itemEstHours">
+                </div>
+                <div class="form-group">
+                    <label>Format Status</label>
+                    <input type="text" id="itemFormatStatus">
+                </div>
+                <div class="form-group">
+                    <label>Update Category</label>
+                    <input type="text" id="itemUpdateCategory">
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="itemNotes" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn modal-close" onclick="closeItemModal()">Cancel</button>
+                    <button type="submit" class="btn modal-submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const today = new Date(2026, 3, 1);
+
+        const trackerData = [
+  { id: 1, name: "Participants → Cohort Setup", day: "Prework", type: "Resource", formatStatus: "Needs BTS pass", updateCategory: "Concept change", deliveryMethod: "Facilitated", owner: "Eduardo", estHours: "3h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "BTS owns cohort setup (participant list, emails, Slack channel, prerequisites check)." },
+  { id: 2, name: "Prework Hub Design & Build", day: "Prework", type: "Resource", formatStatus: "Needs BTS pass", updateCategory: "Concept change", deliveryMethod: "HTML Slide", owner: "", estHours: "8h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Two parallel tracks, split by topic choice. Set A (3 sessions) vs. Set B (3 sessions). New hub = Gates A & B logic, 6 unique workshop modules." },
+  { id: 3, name: "Gate A — Topic Choice (Set A vs. Set B)", day: "Prework", type: "Resource", formatStatus: "TBD", updateCategory: "Concept change", deliveryMethod: "HTML Slide", owner: "", estHours: "1h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Decision gate. Participants choose prework track (Set A or Set B). Branching logic, Anthropic approves topic descriptions." },
+  { id: 4, name: "Set A Prework Modules (Design + Code Deep Dive)", day: "Prework", type: "Module", formatStatus: "Needs BTS pass", updateCategory: "Content edit", deliveryMethod: "Google Colab", owner: "", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "3 modules (System Design track). Topics: API Design Patterns, Prompt Caching (backend), Claude Artifacts demo + Colab build." },
+  { id: 5, name: "Set B Prework Modules (Evals & Product Deep Dive)", day: "Prework", type: "Module", formatStatus: "Needs BTS pass", updateCategory: "Content edit", deliveryMethod: "Google Colab", owner: "", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "3 modules (Evals + Product track). Topics: Eval Harness Intro, Production LLM Patterns, Product Feedback Loop design." },
+  { id: 6, name: "Set A Rubric & Scoring", day: "Prework", type: "Resource", formatStatus: "TBD", updateCategory: "Concept change", deliveryMethod: "TBD", owner: "Ross", estHours: "2h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Rubric for Set A submission (System Design challenge). BTS grades before Day 1." },
+  { id: 7, name: "Set B Rubric & Scoring", day: "Prework", type: "Resource", formatStatus: "TBD", updateCategory: "Concept change", deliveryMethod: "TBD", owner: "Ross", estHours: "2h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Rubric for Set B submission (Evals design challenge). BTS grades before Day 1." },
+  { id: 8, name: "Prework Content Check", day: "Prework", type: "Resource", formatStatus: "As-is", updateCategory: "Content edit", deliveryMethod: "Markdown", owner: "", estHours: "2h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Run admin CLI content-check on all 6 prework modules. Flag stale model refs, deprecated params, broken links." },
+  { id: 9, name: "Participant Welcome + Hub Orientation", day: "Prework", type: "Module", formatStatus: "Needs BTS pass", updateCategory: "Concept change", deliveryMethod: "HTML Slide", owner: "Victor", estHours: "1h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Async video/HTML module. Tour of prework hub, how to submit, what to expect on Day 1." },
+  { id: 10, name: "API Key Allocation (Anthropic AAI)", day: "Prework", type: "Resource", formatStatus: "TBD", updateCategory: "Concept change", deliveryMethod: "TBD", owner: "", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Anthropic's Hayley/Matt provision API keys for each participant. Per-participant keys for tracking usage." },
+  { id: 11, name: "Tech Readiness Check — Participants", day: "Prework", type: "Resource", formatStatus: "TBD", updateCategory: "Concept change", deliveryMethod: "HTML Slide", owner: "", estHours: "1h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Participants confirm: GitHub access, Python 3.9+, Node.js, Colab login, API key receipt." },
+  { id: 12, name: "Gate B — Knowledge Check + Dependency Confirmation", day: "Prework", type: "Resource", formatStatus: "TBD", updateCategory: "TBD", deliveryMethod: "HTML Slide", owner: "", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Gating + API key provisioning. Unlocks API keys + invite. BTS owns API key provisioning for partners." },
+  { id: 13, name: "Welcome, Review & Q&A", day: "Day 1", type: "Module", formatStatus: "Needs BTS pass", updateCategory: "Concept change", deliveryMethod: "HTML Slide", owner: "Victor", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Old kickoff exists (HTML+PPTX). Now shaped by prework topic choices. Netlify: anthropic-basecamp.netlify.app." },
+  { id: 14, name: "Claude Code Workshop", day: "Day 1", type: "Module", formatStatus: "As-is", updateCategory: "Content edit", deliveryMethod: "Markdown", owner: "Ross", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "CC300 content exists (MD). Workshop hosted at claude-code-workshop.netlify.app." },
+  { id: 15, name: "Developer Platform — Colab Round 1", day: "Day 1", type: "Collab", formatStatus: "As-is", updateCategory: "No change needed", deliveryMethod: "Google Colab", owner: "Ross", estHours: "1h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Full materials exist (slides, build-along, Colab notebooks). Facilitator works through live." },
+  { id: 16, name: "Protocols / Prompt Rescue — Colab Round 2", day: "Day 1", type: "Collab", formatStatus: "As-is", updateCategory: "Content edit", deliveryMethod: "Google Colab", owner: "Ross", estHours: "1h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Both folders exist separately. Combined into 30-min colab." },
+  { id: 17, name: "Diagnosing AI Problems — Colab Round 3", day: "Day 1", type: "Collab", formatStatus: "As-is", updateCategory: "Content edit", deliveryMethod: "Google Colab", owner: "Victor", estHours: "1h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Content across MD + Priya email text + zip. Share email text + zip file to participants." },
+  { id: 18, name: "Day 1 Debrief", day: "Day 1", type: "Module", formatStatus: "Needs BTS pass", updateCategory: "Concept change", deliveryMethod: "Facilitated", owner: "", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Nice-to-have", notes: "Old closing content exists. Needs reframe as Day 1 close (not program close)." },
+  { id: 19, name: "Day 1 Q&A and Wrap", day: "Day 1", type: "Module", formatStatus: "As-is", updateCategory: "No change needed", deliveryMethod: "Facilitated", owner: "Victor", estHours: "0h", targetUpdateBy: "V2", status: "Complete", priority: "Must-have", notes: "Facilitated. Old ROS: Victor owned with Anthropic AAI support." },
+  { id: 20, name: "Delivering the Claude Demo", day: "Day 2", type: "Module", formatStatus: "Needs BTS pass", updateCategory: "Content edit", deliveryMethod: "HTML Slide", owner: "", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Delivering Exceptional Demos.html (870KB) + talk track DOCX exist. Everyone demos in new format." },
+  { id: 21, name: "Claude Code Compete", day: "Day 2", type: "Collab", formatStatus: "Needs slides built", updateCategory: "Concept change", deliveryMethod: "HTML Slide", owner: "Ross", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Only links-to-materials.md. Was Codex vs. Claude Code format. Needs challenge prompt, success rubric." },
+  { id: 22, name: "Evals — Pres + Colab", day: "Day 2", type: "Collab", formatStatus: "Needs slides built", updateCategory: "Content edit", deliveryMethod: "Google Colab", owner: "Ross", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Eval-harness code + Colab notebook exist. Needs combined Pres+Colab format." },
+  { id: 23, name: "Inference Optimization", day: "Day 2", type: "Module", formatStatus: "Needs HTML conversion", updateCategory: "Content edit", deliveryMethod: "PPTX", owner: "Victor", estHours: "", targetUpdateBy: "V2", status: "In progress", priority: "Must-have", notes: "PPTX uploaded (13 slides). Has Colab lab link. Admin content-check flagged stale prompt caching beta header." },
+  { id: 24, name: "Context Engineering", day: "Day 2", type: "Module", formatStatus: "Needs BTS pass", updateCategory: "Content edit", deliveryMethod: "Google Colab", owner: "Ross", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "ContextEngineering.html (1.7MB, updated 3/26) + Colab notebook." },
+  { id: 25, name: "Agent Build", day: "Day 2", type: "Module", formatStatus: "Needs BTS pass", updateCategory: "Concept change", deliveryMethod: "Claude Native", owner: "", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Old Agent Battle mini-hack. Renamed Agent Build hackathon. Needs scope doc, team formation strategy." },
+  { id: 26, name: "Day 2 Q&A", day: "Day 2", type: "Module", formatStatus: "As-is", updateCategory: "No change needed", deliveryMethod: "Facilitated", owner: "Victor", estHours: "0h", targetUpdateBy: "V2", status: "Complete", priority: "Must-have", notes: "Facilitated. Old ROS: Victor owned." },
+  { id: 27, name: "Day 2 Wrap / Debrief", day: "Day 2", type: "Module", formatStatus: "Needs BTS pass", updateCategory: "Concept change", deliveryMethod: "Facilitated", owner: "", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Nice-to-have", notes: "Old closing content needs reframe for 2-day format." },
+  { id: 28, name: "Partner Close", day: "Day 2", type: "Module", formatStatus: "Needs BTS pass", updateCategory: "Concept change", deliveryMethod: "HTML Slide", owner: "Victor", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Old kickoff-and-closing (PPTX + HTML). Needs reframe for 2-day close." },
+  { id: 29, name: "Basecamp Redesign Proposal", day: "—", type: "Resource", formatStatus: "HTML done", updateCategory: "No change needed", deliveryMethod: "HTML Slide", owner: "Victor", estHours: "0h", targetUpdateBy: "Done", status: "Complete", priority: "—", notes: "basecamp-redesign-v4_5-readable.html. Reference doc only." },
+  { id: 30, name: "Survey Analysis & Recommendations", day: "—", type: "Resource", formatStatus: "HTML + XLSX done", updateCategory: "No change needed", deliveryMethod: "HTML Slide", owner: "Victor", estHours: "0h", targetUpdateBy: "Done", status: "Complete", priority: "—", notes: "Program review + survey data. Reference only." },
+  { id: 31, name: "Run-of-Show (2-Day Format)", day: "—", type: "Resource", formatStatus: "Needs BTS pass", updateCategory: "Concept change", deliveryMethod: "Markdown", owner: "Victor", estHours: "4h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Rebuild from old 3.20 ROS.xlsx. New ROS needs: 2-day timing, transition scripts, tech failure decision trees." },
+  { id: 32, name: "Facilitator Prep Docs — Review & Update", day: "—", type: "Resource", formatStatus: "Needs BTS pass", updateCategory: "Content edit", deliveryMethod: "Markdown", owner: "", estHours: "6h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "15 session folders exist in Facilitator Prep Docs. Review which need updates for renamed/combined sessions." },
+  { id: 33, name: "Prework Data → Day 1 Handoff Process", day: "Prework", type: "Resource", formatStatus: "TBD", updateCategory: "Concept change", deliveryMethod: "TBD", owner: "", estHours: "2h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Define how Gate A/B data flows to facilitator before Day 1. Need: data export format, timing, aggregation." },
+  { id: 34, name: "API Key Provisioning — Partner Process", day: "Prework", type: "Resource", formatStatus: "TBD", updateCategory: "Concept change", deliveryMethod: "TBD", owner: "", estHours: "3h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "BTS owns API keys for partners. Need: provisioning workflow, rate limits, fallback for Day 1 failures." },
+  { id: 35, name: "Admin CLI — Update for 2-Day Format", day: "—", type: "Resource", formatStatus: "Needs BTS pass", updateCategory: "Concept change", deliveryMethod: "Claude Native", owner: "", estHours: "", targetUpdateBy: "V3", status: "Not started", priority: "Nice-to-have", notes: "Existing admin CLI assumes 3-day format. Session list, rubrics, grading config need updating." },
+  { id: 36, name: "Content Check — Run Against V2 Content", day: "—", type: "Resource", formatStatus: "As-is", updateCategory: "Content edit", deliveryMethod: "Markdown", owner: "", estHours: "2h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Admin CLI content-check found 4 stale refs: old model names, deprecated API params, stale beta headers." },
+  { id: 37, name: "Site/LMS — Update for New Module Structure", day: "—", type: "Resource", formatStatus: "Needs BTS pass", updateCategory: "Concept change", deliveryMethod: "HTML Slide", owner: "", estHours: "", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "Participant portal (site/index.html, 166KB) hosted on Netlify. Needs 2-day format + new prework hub." },
+  { id: 38, name: "Dual-Lens Facilitation Notes", day: "—", type: "Resource", formatStatus: "TBD", updateCategory: "Concept change", deliveryMethod: "Markdown", owner: "", estHours: "", targetUpdateBy: "V3", status: "Not started", priority: "Nice-to-have", notes: "Per-session cues for engaging engineers vs. partner leads. Highest risk: Claude Code Workshop, Inference Optimization, Agent Build, Evals." }
+        ];
+
+        const knownOwners = ["Victor", "Eduardo", "Teague", "Ross", "Ted", "Haidee", "Coraima", "Sara", "Hayley (Anthropic)", "Matt (Anthropic)", "Sammy"];
+
+        const cohortSchedule = [
+            { event: 1, day1: "Apr 7", day2: "Apr 8", room1: "Gallery", room2: "Gallery" },
+            { event: 2, day1: "Apr 21", day2: "Apr 22", room1: "Salon", room2: "Gallery" },
+            { event: 3, day1: "May 5", day2: "May 6", room1: "Gallery", room2: "Gallery" },
+            { event: 4, day1: "May 7", day2: "May 8", room1: "The Salon", room2: "The Salon" },
+            { event: 5, day1: "May 19", day2: "May 20", room1: "Gallery", room2: "Gallery" },
+            { event: 6, day1: "May 21", day2: "May 22", room1: "Gallery", room2: "Gallery" },
+            { event: 7, day1: "May 26", day2: "May 27", room1: "Gallery", room2: "Gallery" }
+        ];
+
+        let allItems = [];
+        let scheduleRoles = {};
+        let searchQuery = '';
+
+        function getDisplayItems() {
+            if (!searchQuery) return allItems;
+            return allItems.filter(item =>
+                item.name.toLowerCase().includes(searchQuery) ||
+                item.notes.toLowerCase().includes(searchQuery) ||
+                item.owner.toLowerCase().includes(searchQuery)
+            );
+        }
+
+        function init() {
+            loadFromStorage();
+
+            // Initialize default facilitator assignments
+            const defaultRoles = {
+                'event1': { 'Lead Facilitator': 'Victor Steeb', 'Tech Facilitator': 'Ross Crooke', 'Table Coach 1': 'Eduardo', 'Table Coach 2': 'Teague', 'Observer': '' },
+                'event2': { 'Lead Facilitator': 'Victor Steeb', 'Tech Facilitator': 'Ross Crooke', 'Table Coach 1': 'Eduardo', 'Table Coach 2': 'Teague', 'Observer': '' },
+                'event3': { 'Lead Facilitator': 'Victor Steeb', 'Tech Facilitator': 'Ross Crooke', 'Table Coach 1': 'Eduardo', 'Table Coach 2': 'Teague', 'Observer': '' },
+                'event4': { 'Lead Facilitator': 'Victor Steeb', 'Tech Facilitator': 'Ross Crooke', 'Table Coach 1': 'Eduardo', 'Table Coach 2': 'Teague', 'Observer': '' },
+                'event5': { 'Lead Facilitator': 'Victor Steeb', 'Tech Facilitator': 'Ross Crooke', 'Table Coach 1': 'Coraima', 'Table Coach 2': 'Sammy', 'Observer': '' },
+                'event6': { 'Lead Facilitator': 'Victor Steeb', 'Tech Facilitator': 'Ross Crooke', 'Table Coach 1': 'Coraima', 'Table Coach 2': 'Sammy', 'Observer': '' },
+                'event7': { 'Lead Facilitator': 'Victor Steeb', 'Tech Facilitator': 'Ross Crooke', 'Table Coach 1': 'Coraima', 'Table Coach 2': 'Sammy', 'Observer': '' }
+            };
+
+            // If no items loaded from storage, use defaults
+            if (allItems.length === 0) {
+                allItems = JSON.parse(JSON.stringify(trackerData));
+                saveToStorage();
+            }
+
+            // Migrate old field name: versionTarget → targetUpdateBy
+            let migrated = false;
+            allItems.forEach(item => {
+                if (item.versionTarget !== undefined && item.targetUpdateBy === undefined) {
+                    item.targetUpdateBy = item.versionTarget;
+                    delete item.versionTarget;
+                    migrated = true;
+                }
+                // Also migrate collabFlag → deliveryMethod if old data
+                if (item.collabFlag !== undefined && item.deliveryMethod === undefined) {
+                    item.deliveryMethod = 'TBD';
+                    delete item.collabFlag;
+                    migrated = true;
+                }
+            });
+            if (migrated) saveToStorage();
+
+            // Apply default roles if scheduleRoles is empty
+            if (Object.keys(scheduleRoles).length === 0) {
+                scheduleRoles = JSON.parse(JSON.stringify(defaultRoles));
+                saveToStorage();
+            }
+
+            populateOwnersList();
+            renderAllViews();
+            attachEventListeners();
+        }
+
+        function loadFromStorage() {
+            const stored = localStorage.getItem('anthropic-basecamp-tracker');
+            if (stored) {
+                try {
+                    const data = JSON.parse(stored);
+                    allItems = data.items || [];
+                    scheduleRoles = data.roles || {};
+                } catch (e) {
+                    console.error('Failed to load from storage', e);
+                }
+            }
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('anthropic-basecamp-tracker', JSON.stringify({
+                items: allItems,
+                roles: scheduleRoles
+            }));
+        }
+
+        function populateOwnersList() {
+            const list = document.getElementById('ownersList');
+            list.innerHTML = knownOwners.map(o => `<option value="${o}">`).join('');
+        }
+
+        function attachEventListeners() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                    this.classList.add('active');
+                    document.getElementById(this.dataset.tab).classList.add('active');
+                });
+            });
+
+            document.getElementById('searchInput').addEventListener('input', filterAllViews);
+
+            document.getElementById('menuBtn').addEventListener('click', function() {
+                document.getElementById('dropdownMenu').classList.toggle('active');
+            });
+
+            document.getElementById('importFile').addEventListener('change', importJSON);
+        }
+
+        function renderAllViews() {
+            renderDashboard();
+            renderKanban();
+            renderTable();
+            renderByDay();
+            renderSchedule();
+        }
+
+        function renderDashboard() {
+            const tbody = document.getElementById('tableBody');
+            document.getElementById('totalItems').textContent = allItems.length;
+            
+            const statuses = { 'Not started': 0, 'In Progress': 0, 'Complete': 0 };
+            allItems.forEach(item => {
+                if (statuses.hasOwnProperty(item.status)) {
+                    statuses[item.status]++;
+                }
+            });
+            
+            document.getElementById('notStartedCount').textContent = statuses['Not started'];
+            
+            const complete = allItems.filter(i => i.status === 'Complete').length;
+            const completionRate = allItems.length > 0 ? Math.round((complete / allItems.length) * 100) : 0;
+            document.getElementById('completionRate').textContent = completionRate + '%';
+            
+            const mustHave = allItems.filter(i => i.priority === 'Must-have').length;
+            document.getElementById('mustHaveCount').textContent = mustHave;
+            
+            const event1Date = new Date('2026-04-07');
+            const today = new Date('2026-04-01');
+            const daysUntil = Math.ceil((event1Date - today) / (1000 * 60 * 60 * 24));
+            document.getElementById('daysToEvent').textContent = daysUntil;
+
+            // Update version progress bars with item counts
+            ['V2', 'V3', 'V4'].forEach(version => {
+                const versionItems = allItems.filter(i => i.targetUpdateBy === version);
+                const versionComplete = versionItems.filter(i => i.status === 'Complete').length;
+                const progress = versionItems.length > 0 ? Math.round((versionComplete / versionItems.length) * 100) : 0;
+                document.getElementById(version.toLowerCase() + 'Progress').textContent = progress + '%';
+                document.getElementById(version.toLowerCase() + 'Bar').style.width = progress + '%';
+                document.getElementById(version.toLowerCase() + 'Count').textContent = versionComplete + '/' + versionItems.length;
+            });
+
+            // Populate Upcoming Events & Facilitators (ALL events in sidebar)
+            const eventsContainer = document.getElementById('upcomingEventsGrid');
+            const cohortColors = ['var(--clay)', 'var(--sky)', 'var(--olive)', 'var(--fig)', 'var(--heather)', 'var(--cactus)', 'var(--oat)'];
+            eventsContainer.innerHTML = cohortSchedule.map((c, idx) => {
+                const eventDate = new Date('2026-' + (c.day1.startsWith('Apr') ? '04' : '05') + '-' + c.day1.split(' ')[1].padStart(2, '0'));
+                const daysOut = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
+                const isPast = daysOut < 0;
+                const isNext = daysOut >= 0 && (idx === 0 || cohortSchedule.slice(0, idx).every(prev => {
+                    const pd = new Date('2026-' + (prev.day1.startsWith('Apr') ? '04' : '05') + '-' + prev.day1.split(' ')[1].padStart(2, '0'));
+                    return Math.ceil((pd - today) / (1000 * 60 * 60 * 24)) < 0;
+                }));
+                const roles = ['Lead Facilitator', 'Tech Facilitator', 'Table Coach 1', 'Table Coach 2', 'Observer'];
+                const unconfirmedRoles = roles.filter(role => !getRoleAssignment(c.event, role));
+                const hasUnconfirmed = unconfirmedRoles.length > 0;
+                const borderColor = cohortColors[idx % cohortColors.length];
+
+                return `
+                    <div style="padding: 12px; border: 1px solid ${hasUnconfirmed ? 'var(--coral)' : 'var(--border-color)'}; border-left: 4px solid ${borderColor}; border-radius: 8px; background: ${hasUnconfirmed ? 'rgba(235, 206, 206, 0.15)' : 'white'}; opacity: ${isPast ? '0.5' : '1'};">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <span style="font-size: 13px; font-weight: 700;">Event ${c.event}${isNext ? ' <span style=\'background: var(--clay); color: white; padding: 1px 6px; border-radius: 8px; font-size: 9px;\'>NEXT</span>' : ''}</span>
+                            <span style="font-size: 10px; font-weight: 600; color: ${borderColor};">${daysOut > 0 ? daysOut + 'd' : daysOut === 0 ? 'TODAY' : 'Done'}</span>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">${c.day1}–${c.day2} · ${c.room1}</p>
+                        <div style="font-size: 10px; line-height: 1.5; color: var(--text-tertiary);">
+                            ${getRoleAssignment(c.event, 'Lead Facilitator') ? '<span>' + getRoleAssignment(c.event, 'Lead Facilitator') + '</span>' : '<span style="color: var(--fig); font-weight: 600;">Lead TBD</span>'}
+                             · ${getRoleAssignment(c.event, 'Tech Facilitator') ? '<span>' + getRoleAssignment(c.event, 'Tech Facilitator') + '</span>' : '<span style="color: var(--fig); font-weight: 600;">Tech TBD</span>'}
+                        </div>
+                        ${hasUnconfirmed ? '<div style="margin-top: 4px;"><span style="background: var(--coral); color: var(--fig); padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 700;">' + unconfirmedRoles.length + ' ROLE' + (unconfirmedRoles.length > 1 ? 'S' : '') + ' UNCONFIRMED</span></div>' : ''}
+                    </div>
+                `;
+            }).join('');
+
+            // Populate V2 Priority Needs Attention
+            const v2NeedsContainer = document.getElementById('v2NeedsAttentionGrid');
+            const v2Items = getDisplayItems().filter(i => i.targetUpdateBy === 'V2' && (i.status === 'Not started' || !i.owner || !i.estHours));
+            v2NeedsContainer.innerHTML = v2Items.map(item => `
+                <div style="padding: 12px; background: ${item.status === 'Not started' ? 'rgba(217, 119, 87, 0.08)' : 'rgba(120, 140, 93, 0.08)'}; border-radius: 6px; border-left: 3px solid ${item.status === 'Not started' ? 'var(--clay)' : 'var(--olive)'};">
+                    <div style="font-size: 12px; font-weight: 600; margin-bottom: 4px;">${item.name}</div>
+                    <div style="font-size: 11px; color: var(--text-secondary);">
+                        ${item.status === 'Not started' ? '<span style="color: var(--clay);">Not started</span>' : '<span>' + item.status + '</span>'} ${!item.owner ? '| <span style="color: var(--fig);">No owner</span>' : ''} ${!item.estHours ? '| <span style="color: var(--fig);">No estimate</span>' : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderKanban() {
+            const columns = [
+                { key: 'V2', label: 'V2 · Apr 7', color: 'clay' },
+                { key: 'V3', label: 'V3 · Apr 21', color: 'sky' },
+                { key: 'V4', label: 'V4 · Apr 27–May 27', color: 'olive' },
+                { key: 'TBD', label: 'TBD / Future', color: 'fig' },
+                { key: 'Done', label: 'Done', color: 'cactus' }
+            ];
+            const container = document.getElementById('kanbanContainer');
+            container.innerHTML = '';
+            container.style.display = 'grid';
+            container.style.gridTemplateColumns = 'repeat(5, 1fr)';
+            container.style.gap = '14px';
+            container.style.alignContent = 'start';
+            container.style.height = 'calc(100vh - 160px)';
+
+            columns.forEach(col => {
+                const items = getDisplayItems().filter(i => i.targetUpdateBy === col.key);
+                const columnDiv = document.createElement('div');
+                columnDiv.className = `kanban-column ${col.key.toLowerCase()}`;
+                columnDiv.style.cssText = 'background: white; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;';
+
+                columnDiv.innerHTML = `
+                    <div class="kanban-header" style="background: var(--${col.color}); ${col.key === 'Done' || col.key === 'TBD' ? 'color: var(--text-primary);' : 'color: white;'} font-family: 'Source Code Pro', monospace; font-size: 11px; letter-spacing: 1.2px;">
+                        ${col.label} (${items.length})
+                    </div>
+                    <div class="kanban-cards" data-version="${col.key}" style="flex: 1; overflow-y: auto; padding: 12px; min-height: 80px; display: flex; flex-direction: column; gap: 10px;">
+                        ${items.length === 0 ? '<p style="color: var(--text-tertiary); font-size: 12px; font-style: italic;">No items</p>' : items.map(item => `
+                            <div class="kanban-card" draggable="true" data-id="${item.id}" style="padding: 14px; background: var(--bg-primary); border-radius: 6px; border-left: 3px solid var(--${col.color}); cursor: pointer; margin-bottom: 0;" title="Click to edit · Drag to move">
+                                <div style="font-weight: 600; font-size: 13px; margin-bottom: 8px; color: var(--text-primary);">${item.name}</div>
+                                <div style="font-size: 11px; color: var(--text-secondary); line-height: 1.6;">
+                                    <p style="margin: 2px 0;"><span class="badge ${item.status.toLowerCase().replace(' ', '-')}">${item.status}</span> <span class="badge ${item.priority.toLowerCase().replace('-', '')}">${item.priority}</span></p>
+                                    <p style="margin: 2px 0;"><strong>Day:</strong> ${item.day} · <strong>Type:</strong> ${item.type}</p>
+                                    <p style="margin: 2px 0;"><strong>Owner:</strong> ${item.owner || '<span style="color: var(--fig);">Unassigned</span>'}</p>
+                                    <p style="margin: 2px 0;"><strong>Method:</strong> ${item.deliveryMethod}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(columnDiv);
+            });
+
+            attachDragDrop();
+        }
+
+        function attachDragDrop() {
+            document.querySelectorAll('.kanban-card').forEach(card => {
+                let wasDragged = false;
+                card.addEventListener('dragstart', e => {
+                    wasDragged = true;
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('itemId', card.dataset.id);
+                });
+                card.addEventListener('dragend', () => {
+                    setTimeout(() => { wasDragged = false; }, 100);
+                });
+                card.addEventListener('click', () => {
+                    if (!wasDragged) editItem(parseInt(card.dataset.id));
+                });
+            });
+
+            document.querySelectorAll('.kanban-cards').forEach(zone => {
+                zone.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    zone.style.background = 'rgba(217, 119, 87, 0.1)';
+                });
+
+                zone.addEventListener('dragleave', () => {
+                    zone.style.background = '';
+                });
+
+                zone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    const itemId = parseInt(e.dataTransfer.getData('itemId'));
+                    const newVersion = zone.dataset.version;
+                    const item = allItems.find(i => i.id === itemId);
+                    if (item) {
+                        item.targetUpdateBy = newVersion;
+                        saveToStorage();
+                        renderKanban();
+                    }
+                });
+            });
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = getDisplayItems().map(item => `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.day}</td>
+                    <td><span class="badge ${item.type.toLowerCase()}">${item.type}</span></td>
+                    <td><span class="badge ${item.status.toLowerCase().replace(' ', '-')}">${item.status}</span></td>
+                    <td><span class="badge ${item.priority.toLowerCase().replace('-', '')}">${item.priority}</span></td>
+                    <td>${item.deliveryMethod}</td>
+                    <td>${item.targetUpdateBy}</td>
+                    <td>${item.owner}</td>
+                    <td class="notes-cell">${item.notes}</td>
+                    <td style="text-align: center;">
+                        <button class="btn" style="padding: 4px 8px; font-size: 11px;" onclick="editItem(${item.id})">Edit</button>
+                        <button class="btn" style="padding: 4px 8px; font-size: 11px; color: #c85a42;" onclick="deleteItem(${item.id})">Del</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // renderVersionSort removed — merged into renderKanban
+
+                function renderByDay() {
+            const container = document.getElementById('bydayContainer');
+            const days = ['Prework', 'Day 1', 'Day 2'];
+            const dayColors = { 'Prework': 'prework', 'Day 1': 'day1', 'Day 2': 'day2' };
+
+            container.innerHTML = days.map(day => {
+                const items = getDisplayItems().filter(i => i.day === day);
+                return `
+                    <div class="byday-column">
+                        <div class="byday-header ${dayColors[day]}">${day}</div>
+                        <div class="byday-items ${dayColors[day]}">
+                            ${items.map(item => `
+                                <div class="byday-item" onclick="editItem(${item.id})" style="cursor: pointer;" title="Click to edit">
+                                    <h4>${item.name}</h4>
+                                    <p><strong>${item.type}</strong> | ${item.deliveryMethod}</p>
+                                    <p style="margin-top: 4px; font-size: 11px;">${item.notes.substring(0, 60)}...</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const ref = document.createElement('div');
+            ref.className = 'byday-reference';
+            ref.innerHTML = '<strong>Reference:</strong> Items organized by delivery day. Select delivery method and notes for implementation details.';
+            container.appendChild(ref);
+        }
+
+        function renderSchedule() {
+            const container = document.getElementById('calendarView');
+            const cohortColors = ['var(--clay)', 'var(--sky)', 'var(--olive)', 'var(--fig)', 'var(--heather)', 'var(--cactus)', 'var(--oat)'];
+            const cohortColorsBg = ['rgba(217,119,87,0.15)', 'rgba(106,155,204,0.15)', 'rgba(120,140,93,0.15)', 'rgba(196,102,134,0.15)', 'rgba(203,202,219,0.15)', 'rgba(188,209,202,0.15)', 'rgba(227,218,204,0.15)'];
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+            // Build event date map: date string -> [{event, dayNum, color, bgColor}]
+            const eventMap = {};
+            cohortSchedule.forEach((c, idx) => {
+                const month1 = c.day1.startsWith('Apr') ? 3 : 4;
+                const dayNum1 = parseInt(c.day1.split(' ')[1]);
+                const month2 = c.day2.startsWith('Apr') ? 3 : 4;
+                const dayNum2 = parseInt(c.day2.split(' ')[1]);
+                const d1 = new Date(2026, month1, dayNum1);
+                const d2 = new Date(2026, month2, dayNum2);
+                const key1 = d1.toISOString().slice(0,10);
+                const key2 = d2.toISOString().slice(0,10);
+                if (!eventMap[key1]) eventMap[key1] = [];
+                eventMap[key1].push({ event: c.event, dayLabel: 'Day 1', room: c.room1, color: cohortColors[idx], bgColor: cohortColorsBg[idx], full: c });
+                if (!eventMap[key2]) eventMap[key2] = [];
+                eventMap[key2].push({ event: c.event, dayLabel: 'Day 2', room: c.room2, color: cohortColors[idx], bgColor: cohortColorsBg[idx], full: c });
+            });
+
+            const today = new Date(2026, 3, 1); // April 1 reference
+            const months = [
+                { name: 'April 2026', year: 2026, month: 3 },
+                { name: 'May 2026', year: 2026, month: 4 }
+            ];
+
+            let html = '<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">';
+            html += '<h2 style="font-size:22px; font-weight:700;">Event Calendar</h2>';
+            html += '<div style="display:flex; gap:8px; flex-wrap:wrap;">';
+            cohortSchedule.forEach((c, idx) => {
+                html += `<span style="font-size:11px; padding:4px 10px; border-radius:12px; background:${cohortColorsBg[idx]}; border:2px solid ${cohortColors[idx]}; font-weight:600; cursor:pointer;" onclick="openEventDetail(${c.event})">E${c.event}: ${c.day1}–${c.day2}</span>`;
+            });
+            html += '</div></div>';
+
+            html += '<div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">';
+
+            months.forEach(m => {
+                const firstDay = new Date(m.year, m.month, 1).getDay();
+                const daysInMonth = new Date(m.year, m.month + 1, 0).getDate();
+                const todayKey = new Date().toISOString().slice(0,10);
+
+                html += `<div style="background:white; border-radius:12px; border:1px solid var(--border-color); overflow:hidden;">`;
+                html += `<div style="background:linear-gradient(90deg, var(--clay), var(--sky)); color:white; padding:14px 20px; font-size:17px; font-weight:700;">${m.name}</div>`;
+                html += `<div style="padding:16px;">`;
+
+                // Day-of-week headers
+                html += '<div style="display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:8px;">';
+                dayNames.forEach(d => {
+                    html += `<div style="text-align:center; font-size:11px; font-weight:700; color:var(--text-tertiary); padding:4px 0;">${d}</div>`;
+                });
+                html += '</div>';
+
+                // Calendar grid
+                html += '<div style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px;">';
+
+                // Empty cells for offset
+                for (let i = 0; i < firstDay; i++) {
+                    html += '<div style="min-height:72px;"></div>';
+                }
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateKey = `2026-${String(m.month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+                    const events = eventMap[dateKey] || [];
+                    const isToday = dateKey === '2026-04-01';
+                    const isWeekend = new Date(m.year, m.month, day).getDay() === 0 || new Date(m.year, m.month, day).getDay() === 6;
+
+                    html += `<div style="min-height:72px; padding:4px; border-radius:8px; border:${isToday ? '2px solid var(--clay)' : '1px solid var(--border-color)'}; background:${events.length ? events[0].bgColor : isWeekend ? 'var(--bg-tertiary)' : 'white'}; position:relative; ${events.length ? 'cursor:pointer;' : ''}" ${events.length ? `onclick="openEventDetail(${events[0].event})"` : ''}>`;
+                    html += `<div style="font-size:12px; font-weight:${isToday ? '800' : '600'}; color:${isToday ? 'var(--clay)' : events.length ? 'var(--text-primary)' : 'var(--text-tertiary)'}; margin-bottom:3px;">${day}</div>`;
+
+                    events.forEach(ev => {
+                        html += `<div style="font-size:9px; font-weight:700; padding:3px 5px; border-radius:4px; background:${ev.color}; color:white; margin-bottom:2px; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">E${ev.event} ${ev.dayLabel}</div>`;
+                        html += `<div style="font-size:8px; color:var(--text-secondary); padding:0 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${ev.room}</div>`;
+                    });
+
+                    html += '</div>';
+                }
+
+                html += '</div></div></div>';
+            });
+
+            html += '</div>';
+
+            container.innerHTML = html;
+        }
+
+        function openEventDetail(eventNum) {
+            const c = cohortSchedule.find(e => e.event === eventNum);
+            if (!c) return;
+            const cohortColors = ['#D97757', '#6A9BCC', '#788C5D', '#C46686', '#CBCADB', '#BCD1CA', '#E3DACC'];
+            const color = cohortColors[eventNum - 1] || '#D97757';
+            const roleTypes = ['Lead Facilitator', 'Tech Facilitator', 'Table Coach 1', 'Table Coach 2', 'Observer'];
+            const roleIcons = { 'Lead Facilitator': '🎯', 'Tech Facilitator': '💻', 'Table Coach 1': '🪑', 'Table Coach 2': '🪑', 'Observer': '👁' };
+
+            const today = new Date(2026, 3, 1);
+            const month1 = c.day1.startsWith('Apr') ? 3 : 4;
+            const dayNum1 = parseInt(c.day1.split(' ')[1]);
+            const eventDate = new Date(2026, month1, dayNum1);
+            const daysOut = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
+
+            let html = `<button onclick="closeEventDetail()" style="position:absolute; top:16px; right:16px; background:none; border:none; font-size:20px; cursor:pointer; color:var(--text-tertiary);">✕</button>`;
+            html += `<div style="border-left:5px solid ${color}; padding-left:16px; margin-bottom:24px;">`;
+            html += `<h2 style="font-size:22px; font-weight:800; margin-bottom:4px;">Event ${c.event}</h2>`;
+            html += `<p style="font-size:14px; color:var(--text-secondary);">${c.day1} – ${c.day2} at Shack 15</p>`;
+            html += `<span style="display:inline-block; margin-top:8px; font-size:12px; font-weight:700; padding:4px 12px; border-radius:12px; background:${daysOut > 0 ? 'rgba(217,119,87,0.12)' : daysOut === 0 ? 'rgba(120,140,93,0.15)' : 'var(--bg-tertiary)'}; color:${daysOut > 0 ? color : daysOut === 0 ? 'var(--olive)' : 'var(--text-tertiary)'};">${daysOut > 0 ? daysOut + ' days away' : daysOut === 0 ? 'TODAY' : 'Completed'}</span>`;
+            html += '</div>';
+
+            // Room info
+            html += '<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px;">';
+            html += `<div style="padding:14px; background:var(--bg-tertiary); border-radius:10px; text-align:center;">
+                <div style="font-size:10px; font-weight:700; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:1px;">Day 1 Room</div>
+                <div style="font-size:15px; font-weight:700; margin-top:4px;">${c.room1}</div>
+            </div>`;
+            html += `<div style="padding:14px; background:var(--bg-tertiary); border-radius:10px; text-align:center;">
+                <div style="font-size:10px; font-weight:700; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:1px;">Day 2 Room</div>
+                <div style="font-size:15px; font-weight:700; margin-top:4px;">${c.room2}</div>
+            </div>`;
+            html += '</div>';
+
+            // Role assignments
+            html += '<h3 style="font-size:15px; font-weight:700; margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid ' + color + ';">Team Assignments</h3>';
+            roleTypes.forEach(role => {
+                const val = getRoleAssignment(c.event, role);
+                const isEmpty = !val;
+                html += `<div style="display:flex; align-items:center; gap:12px; margin-bottom:12px; padding:10px 14px; border-radius:8px; background:${isEmpty ? 'rgba(196,102,134,0.06)' : 'var(--bg-tertiary)'}; border:1px solid ${isEmpty ? 'var(--coral)' : 'transparent'};">`;
+                html += `<span style="font-size:16px;">${roleIcons[role] || '👤'}</span>`;
+                html += `<div style="flex:1;">`;
+                html += `<div style="font-size:11px; font-weight:700; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:0.5px;">${role}</div>`;
+                html += `<input type="text" value="${val}" placeholder="${isEmpty ? 'Unassigned — click to add' : ''}" onchange="saveRoleAssignment(${c.event}, '${role}', this.value); renderSchedule();" style="width:100%; border:none; background:transparent; font-size:14px; font-weight:600; color:var(--text-primary); padding:2px 0; outline:none;">`;
+                html += `</div>`;
+                if (isEmpty) html += `<span style="font-size:9px; font-weight:700; color:var(--fig); background:var(--coral); padding:2px 8px; border-radius:6px;">TBD</span>`;
+                html += '</div>';
+            });
+
+            document.getElementById('eventDetailPanel').innerHTML = html;
+            const overlay = document.getElementById('eventDetailOverlay');
+            overlay.style.display = 'flex';
+        }
+
+        function closeEventDetail() {
+            document.getElementById('eventDetailOverlay').style.display = 'none';
+        }
+
+        function getRoleAssignment(event, role) {
+            return scheduleRoles[`event${event}`]?.[role] || '';
+        }
+
+        function saveRoleAssignment(event, role, value) {
+            if (!scheduleRoles[`event${event}`]) {
+                scheduleRoles[`event${event}`] = {};
+            }
+            scheduleRoles[`event${event}`][role] = value;
+            saveToStorage();
+        }
+
+        function filterAllViews() {
+            searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            renderAllViews();
+        }
+
+        function openAddItemModal() {
+            document.getElementById('itemModal').classList.add('active');
+            document.getElementById('itemName').focus();
+        }
+
+        function closeItemModal() {
+            document.getElementById('itemModal').classList.remove('active');
+        }
+
+        function editItem(id) {
+            const item = allItems.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('itemName').value = item.name;
+            document.getElementById('itemDay').value = item.day;
+            document.getElementById('itemType').value = item.type;
+            document.getElementById('itemStatus').value = item.status;
+            document.getElementById('itemPriority').value = item.priority;
+            document.getElementById('itemDeliveryMethod').value = item.deliveryMethod;
+            document.getElementById('itemtargetUpdateBy').value = item.targetUpdateBy;
+            document.getElementById('itemOwner').value = item.owner;
+            document.getElementById('itemEstHours').value = item.estHours;
+            document.getElementById('itemFormatStatus').value = item.formatStatus;
+            document.getElementById('itemUpdateCategory').value = item.updateCategory;
+            document.getElementById('itemNotes').value = item.notes;
+
+            document.getElementById('itemModal').dataset.editId = id;
+            document.getElementById('itemModal').classList.add('active');
+        }
+
+        function saveItem(e) {
+            e.preventDefault();
+            const editId = document.getElementById('itemModal').dataset.editId;
+            const itemData = {
+                name: document.getElementById('itemName').value,
+                day: document.getElementById('itemDay').value,
+                type: document.getElementById('itemType').value,
+                status: document.getElementById('itemStatus').value,
+                priority: document.getElementById('itemPriority').value,
+                deliveryMethod: document.getElementById('itemDeliveryMethod').value,
+                targetUpdateBy: document.getElementById('itemtargetUpdateBy').value,
+                owner: document.getElementById('itemOwner').value,
+                estHours: document.getElementById('itemEstHours').value,
+                formatStatus: document.getElementById('itemFormatStatus').value,
+                updateCategory: document.getElementById('itemUpdateCategory').value,
+                notes: document.getElementById('itemNotes').value
+            };
+
+            if (editId) {
+                const item = allItems.find(i => i.id === parseInt(editId));
+                Object.assign(item, itemData);
+            } else {
+                const newId = Math.max(...allItems.map(i => i.id), 0) + 1;
+                allItems.push({ id: newId, ...itemData });
+            }
+
+            saveToStorage();
+            renderAllViews();
+            closeItemModal();
+            delete document.getElementById('itemModal').dataset.editId;
+        }
+
+        function deleteItem(id) {
+            if (confirm('Delete this item?')) {
+                allItems = allItems.filter(i => i.id !== id);
+                saveToStorage();
+                renderAllViews();
+            }
+        }
+
+        function exportJSON() {
+            const data = { items: allItems, roles: scheduleRoles };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'basecamp-tracker.json';
+            a.click();
+        }
+
+        function exportCSV() {
+            const headers = ['ID', 'Name', 'Day', 'Type', 'Status', 'Priority', 'Delivery Method', 'Target Update By', 'Owner', 'Notes'];
+            const rows = allItems.map(i => [i.id, i.name, i.day, i.type, i.status, i.priority, i.deliveryMethod, i.targetUpdateBy, i.owner, i.notes]);
+            const csv = [headers, ...rows].map(r => r.map(v => `"${(v || '').toString().replace(/"/g, '""')}"`).join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'basecamp-tracker.csv';
+            a.click();
+        }
+
+        function importJSON(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    if (data.items && Array.isArray(data.items)) {
+                        allItems = data.items;
+                        if (data.roles) scheduleRoles = data.roles;
+                        saveToStorage();
+                        renderAllViews();
+                        alert(`Imported ${data.items.length} items successfully!`);
+                    }
+                } catch (err) {
+                    alert('Failed to import JSON: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        }
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
