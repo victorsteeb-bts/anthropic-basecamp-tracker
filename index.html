@@ -1639,6 +1639,7 @@
                                     <p style="margin: 2px 0;"><strong>Owner:</strong> ${item.owner || '<span style="color: var(--fig);">Unassigned</span>'}</p>
                                     <p style="margin: 2px 0;"><strong>Method:</strong> ${item.deliveryMethod}</p>
                                 </div>
+                                <button onclick="event.stopPropagation(); deleteItem(${item.id})" style="margin-top: 10px; width: 100%; padding: 4px 0; font-size: 11px; color: #c85a42; background: transparent; border: 1px solid #c85a42; border-radius: 4px; cursor: pointer;">Delete</button>
                             </div>
                         `).join('')}
                     </div>
