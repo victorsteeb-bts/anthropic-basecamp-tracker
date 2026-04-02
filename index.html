@@ -1347,6 +1347,7 @@
                     <textarea id="itemNotes" rows="3"></textarea>
                 </div>
                 <div class="modal-actions">
+                    <button type="button" id="modalDeleteBtn" class="btn" style="color: #c85a42; display: none;" onclick="const _id = document.getElementById('itemModal').dataset.editId; closeItemModal(); deleteItem(_id)">Delete</button>
                     <button type="button" class="btn modal-close" onclick="closeItemModal()">Cancel</button>
                     <button type="submit" class="btn modal-submit">Save</button>
                 </div>
@@ -1639,7 +1640,6 @@
                                     <p style="margin: 2px 0;"><strong>Owner:</strong> ${item.owner || '<span style="color: var(--fig);">Unassigned</span>'}</p>
                                     <p style="margin: 2px 0;"><strong>Method:</strong> ${item.deliveryMethod}</p>
                                 </div>
-                                <button onclick="event.stopPropagation(); deleteItem(${item.id})" style="margin-top: 10px; width: 100%; padding: 4px 0; font-size: 11px; color: #c85a42; background: transparent; border: 1px solid #c85a42; border-radius: 4px; cursor: pointer;">Delete</button>
                             </div>
                         `).join('')}
                     </div>
@@ -1909,6 +1909,7 @@
 
         function openAddItemModal() {
             document.getElementById('itemModal').classList.add('active');
+            document.getElementById('modalDeleteBtn').style.display = 'none';
             document.getElementById('itemName').focus();
         }
 
@@ -1934,6 +1935,7 @@
             document.getElementById('itemNotes').value = item.notes;
 
             document.getElementById('itemModal').dataset.editId = id;
+            document.getElementById('modalDeleteBtn').style.display = 'inline-block';
             document.getElementById('itemModal').classList.add('active');
         }
 
