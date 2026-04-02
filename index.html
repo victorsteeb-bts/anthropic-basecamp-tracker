@@ -1229,15 +1229,15 @@
             <table id="trackerTable">
                 <thead>
                     <tr>
-                        <th style="width: 5%;">ID</th>
-                        <th style="width: 18%;">Name</th>
-                        <th style="width: 8%;">Day</th>
-                        <th style="width: 8%;">Type</th>
-                        <th style="width: 10%;">Status</th>
-                        <th style="width: 8%;">Priority</th>
-                        <th style="width: 8%;">Delivery Method</th>
-                        <th style="width: 8%;">Target Update By</th>
-                        <th style="width: 6%;">Owner</th>
+                        <th style="width: 5%; cursor:pointer; user-select:none;" data-field="id" onclick="sortTable('id')">ID<span class="sort-arrow"> ⇅</span></th>
+                        <th style="width: 18%; cursor:pointer; user-select:none;" data-field="name" onclick="sortTable('name')">Name<span class="sort-arrow"> ⇅</span></th>
+                        <th style="width: 8%; cursor:pointer; user-select:none;" data-field="day" onclick="sortTable('day')">Day<span class="sort-arrow"> ⇅</span></th>
+                        <th style="width: 8%; cursor:pointer; user-select:none;" data-field="type" onclick="sortTable('type')">Type<span class="sort-arrow"> ⇅</span></th>
+                        <th style="width: 10%; cursor:pointer; user-select:none;" data-field="status" onclick="sortTable('status')">Status<span class="sort-arrow"> ⇅</span></th>
+                        <th style="width: 8%; cursor:pointer; user-select:none;" data-field="priority" onclick="sortTable('priority')">Priority<span class="sort-arrow"> ⇅</span></th>
+                        <th style="width: 8%; cursor:pointer; user-select:none;" data-field="deliveryMethod" onclick="sortTable('deliveryMethod')">Delivery Method<span class="sort-arrow"> ⇅</span></th>
+                        <th style="width: 8%; cursor:pointer; user-select:none;" data-field="targetUpdateBy" onclick="sortTable('targetUpdateBy')">Target Update By<span class="sort-arrow"> ⇅</span></th>
+                        <th style="width: 6%; cursor:pointer; user-select:none;" data-field="owner" onclick="sortTable('owner')">Owner<span class="sort-arrow"> ⇅</span></th>
                         <th style="width: 25%;">Notes</th>
                         <th style="width: 6%;">Actions</th>
                     </tr>
@@ -1413,6 +1413,8 @@
         let allItems = [];
         let scheduleRoles = {};
         let searchQuery = '';
+        let sortField = null;
+        let sortDir = 1; // 1 = asc, -1 = desc
 
         function getDisplayItems() {
             if (!searchQuery) return allItems;
@@ -1691,9 +1693,38 @@
             });
         }
 
+        function sortTable(field) {
+            if (sortField === field) {
+                sortDir *= -1;
+            } else {
+                sortField = field;
+                sortDir = 1;
+            }
+            renderTable();
+        }
+
         function renderTable() {
+            const dayOrder = { 'Prework': 0, 'Day 1': 1, 'Day 2': 2 };
+            const priorityOrder = { 'High': 0, 'Medium': 1, 'Low': 2 };
+            let items = getDisplayItems().slice();
+            if (sortField) {
+                items.sort((a, b) => {
+                    let av = a[sortField], bv = b[sortField];
+                    if (sortField === 'day') { av = dayOrder[av] ?? 99; bv = dayOrder[bv] ?? 99; }
+                    else if (sortField === 'priority') { av = priorityOrder[av] ?? 99; bv = priorityOrder[bv] ?? 99; }
+                    else if (typeof av === 'string') { av = av.toLowerCase(); bv = bv.toLowerCase(); }
+                    return av < bv ? -sortDir : av > bv ? sortDir : 0;
+                });
+            }
+
+            // Update header arrows
+            document.querySelectorAll('#trackerTable thead th[data-field]').forEach(th => {
+                const arrow = th.querySelector('.sort-arrow');
+                if (arrow) arrow.textContent = th.dataset.field === sortField ? (sortDir === 1 ? ' ▲' : ' ▼') : ' ⇅';
+            });
+
             const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = getDisplayItems().map(item => `
+            tbody.innerHTML = items.map(item => `
                 <tr>
                     <td>${item.id}</td>
                     <td>${item.name}</td>
