@@ -1356,7 +1356,6 @@
     </div>
 
     <script>
-        const today = new Date(2026, 3, 1);
 
         const trackerData = [
   { id: 1, name: "Participants → Cohort Setup", day: "Prework", type: "Resource", formatStatus: "Needs BTS pass", updateCategory: "Concept change", deliveryMethod: "Facilitated", owner: "Eduardo", estHours: "3h", targetUpdateBy: "V2", status: "Not started", priority: "Must-have", notes: "BTS owns cohort setup (participant list, emails, Slack channel, prerequisites check)." },
@@ -1545,7 +1544,7 @@
             document.getElementById('mustHaveCount').textContent = mustHave;
             
             const event1Date = new Date('2026-04-07');
-            const today = new Date('2026-04-01');
+            const today = new Date();
             const daysUntil = Math.ceil((event1Date - today) / (1000 * 60 * 60 * 24));
             document.getElementById('daysToEvent').textContent = daysUntil;
 
@@ -1768,7 +1767,7 @@
                 eventMap[key2].push({ event: c.event, dayLabel: 'Day 2', room: c.room2, color: cohortColors[idx], bgColor: cohortColorsBg[idx], full: c });
             });
 
-            const today = new Date(2026, 3, 1); // April 1 reference
+            const today = new Date();
             const months = [
                 { name: 'April 2026', year: 2026, month: 3 },
                 { name: 'May 2026', year: 2026, month: 4 }
@@ -1811,7 +1810,7 @@
                 for (let day = 1; day <= daysInMonth; day++) {
                     const dateKey = `2026-${String(m.month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
                     const events = eventMap[dateKey] || [];
-                    const isToday = dateKey === '2026-04-01';
+                    const isToday = dateKey === new Date().toISOString().slice(0,10);
                     const isWeekend = new Date(m.year, m.month, day).getDay() === 0 || new Date(m.year, m.month, day).getDay() === 6;
 
                     html += `<div style="min-height:72px; padding:4px; border-radius:8px; border:${isToday ? '2px solid var(--clay)' : '1px solid var(--border-color)'}; background:${events.length ? events[0].bgColor : isWeekend ? 'var(--bg-tertiary)' : 'white'}; position:relative; ${events.length ? 'cursor:pointer;' : ''}" ${events.length ? `onclick="openEventDetail(${events[0].event})"` : ''}>`;
